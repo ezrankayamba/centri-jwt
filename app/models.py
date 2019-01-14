@@ -16,8 +16,8 @@ class User(db.Model):
     def __repr__(self):
         return 'User: {}'.format(self.username)
 
-    def save_to_db(self):
-        if self.id:
+    def save_to_db(self, update=False):
+        if not update:
             db.session.add(self)
         db.session.commit()
 

@@ -30,15 +30,16 @@ def signup():
         }), 403
 
     try:
-        user.save_to_db(update=True)
+        user.save_to_db(update=False)
         return jsonify({
             'result': 0,
             'message': 'Successful registration for user: {}'.format(data['username'])
         })
-    except:
+    except Exception as e:
         return jsonify({
             'result': -1,
-            'message': 'Failed registration for user: {}'.format(data['username'])
+            'message': 'Failed registration for user: {}'.format(data['username']),
+            'error': str(e)
         }), 500
 
 
@@ -56,7 +57,7 @@ def change_pwd():
     try:
         user = User.find_by_username(current_user['username'])
         user.password = User.hash_pwd(data['password'])
-        user.save_to_db()
+        user.save_to_db(update=True)
         return jsonify({
             'result': 0,
             'message': 'Successful change password for user: {}'.format(data['username'])
